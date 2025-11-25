@@ -13,3 +13,8 @@ wheels/
 
 # Don't upload .env to GitHub
 .env
+
+calculator/lorem.txt
+calculator/lorem.txt.save
+pkg/morelorem.txt
+
