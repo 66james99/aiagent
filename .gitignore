@@ -11,3 +11,5 @@ wheels/
 
 .python-version
 
+# Don't upload .env to GitHub
+.env
