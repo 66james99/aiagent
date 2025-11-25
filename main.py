@@ -1,4 +1,6 @@
 import os
+import sys
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -8,12 +10,19 @@ from google import genai
 
 client = genai.Client(api_key=api_key)
 
-def main():
+def main(argv):
     print("Hello from aiagent!")
 
+    if len(argv) == 1:
+        prompt = argv[0]
+    else:
+        print("Please provide a prompt as a command line argument.")
+        sys.exit(1)
+
+        
+
     response = client.models.generate_content(
-    model='gemini-2.0-flash-001', contents='Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum.'
-)
+    model='gemini-2.0-flash-001', contents=prompt)
     print("Prompt tokens:", response.usage_metadata.prompt_token_count)
     print("Response tokens:", response.usage_metadata.candidates_token_count)
     print("Response:")
@@ -23,4 +32,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
