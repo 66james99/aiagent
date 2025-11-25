@@ -1,35 +1,33 @@
-import os
 import sys
-
+import os
+from google import genai
 from dotenv import load_dotenv
 
-load_dotenv()
-api_key = os.environ.get("GEMINI_API_KEY")
 
-from google import genai
+def main():
+    load_dotenv()
 
-client = genai.Client(api_key=api_key)
+    args = sys.argv[1:]
 
-def main(argv):
-    print("Hello from aiagent!")
-
-    if len(argv) == 1:
-        prompt = argv[0]
-    else:
-        print("Please provide a prompt as a command line argument.")
+    if not args:
+        print("AI Code Assistant")
+        print('\nUsage: python main.py "your prompt here"')
+        print('Example: python main.py "How do I build a calculator app?"')
         sys.exit(1)
+    user_prompt = " ".join(args)
 
-        
+    api_key = os.environ.get("GEMINI_API_KEY")
+    client = genai.Client(api_key=api_key)
 
     response = client.models.generate_content(
-    model='gemini-2.0-flash-001', contents=prompt)
+        model="gemini-2.0-flash-001",
+        contents=user_prompt,
+    )
     print("Prompt tokens:", response.usage_metadata.prompt_token_count)
     print("Response tokens:", response.usage_metadata.candidates_token_count)
     print("Response:")
     print(response.text)
 
 
-
-
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()
