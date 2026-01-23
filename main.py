@@ -1,7 +1,6 @@
 import sys
 import os
 from google import genai
-from google.genai import types
 from dotenv import load_dotenv
 
 from prompts import system_prompt
@@ -33,7 +32,7 @@ def main():
         print(f"User prompt: {user_prompt}\n")
 
     messages = [
-        types.Content(role="user", parts=[types.Part(text=user_prompt)]),
+        genai.types.Content(role="user", parts=[genai.types.Part(text=user_prompt)]),
     ]
 
     iters = 0
@@ -57,7 +56,7 @@ def generate_content(client, messages, verbose):
     response = client.models.generate_content(
         model="gemini-2.0-flash-001",
         contents=messages,
-        config=types.GenerateContentConfig(
+        config=genai.types.GenerateContentConfig(
             tools=[available_functions], system_instruction=system_prompt
         ),
     )
@@ -91,6 +90,8 @@ def generate_content(client, messages, verbose):
 
     if not function_responses:
         raise Exception("no function responses generated, exiting.")
+
+    messages.append(genai.types.Content(role="tool", parts=function_responses))
 
 if __name__ == "__main__":
     main()
